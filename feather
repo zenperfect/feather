@@ -39,7 +39,6 @@ define("REPORTS_DIR",           APP_DIR     ."reports".DIRECTORY_SEPARATOR);
 define("CONFIG_FILE",           APP_DIR     ."config.php");
 define("EVENT_LOG",             APP_DIR     ."event.log");
 define("ERROR_LOG",             APP_DIR     ."error.log");
-
 /*
 |--------------------------------------------------------------------------
 | Instantiate Feather
