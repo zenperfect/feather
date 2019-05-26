@@ -2,7 +2,9 @@
 
 namespace App;
 
-use App\Commands\Stats;
+use App\Commands\RawQuery;
+use App\Commands\StatQuery;
+use App\Commands\UriOriginQuery;
 
 class Feather {
 
@@ -21,7 +23,9 @@ class Feather {
     protected function initializeCommandConsole() {
         $this->command_console = new \Symfony\Component\Console\Application("Zen Perfect Design | {$this->application_name}");
         $this->command_console->setVersion($this->application_version);
-        $this->command_console->add(new Stats());
+        $this->command_console->add(new StatQuery());
+        $this->command_console->add(new RawQuery());
+        $this->command_console->add(new UriOriginQuery());
     }
 
     public function console() {

@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Stats extends Command {
+class StatQuery extends Command {
 
     public function configure() {
         // General
@@ -23,7 +23,6 @@ class Stats extends Command {
         // Options
         $this->addOption("count", "c", InputOption::VALUE_OPTIONAL, "Number of records to print to console from each analytic.", 10);
         $this->addOption('json', null, InputOption::VALUE_NONE, 'Output as JSON for further processing.');
-        $this->addOption('raw-entries', null, InputOption::VALUE_NONE, 'Output raw Apache Log lines associated with query.');
         $this->addOption('log-type', null, InputOption::VALUE_OPTIONAL, 'Specify whether it is a common or combined formatted Apache log.', "combined");
         $this->addOption('ignore-agent', null, InputOption::VALUE_OPTIONAL, "Exclude all traffic that contains the Agent String you provide.", false);
         $this->addOption('ignore-bots', null, InputOption::VALUE_NONE, "Exclude all traffic from bots and spiders.");
@@ -32,6 +31,7 @@ class Stats extends Command {
         $this->addOption('ignore-files', null, InputOption::VALUE_NONE, "Exclude requests for static resources such as css, js, jpg files.");
         $this->addOption('only-files', null, InputOption::VALUE_NONE, "Only display requests for static resources such as css, js, jpg files.");
         $this->addOption('response-code', null, InputOption::VALUE_OPTIONAL, 'Only show traffic based on a HTTP response code.');
+        $this->addOption('successful', null, InputOption::VALUE_NONE, "Only show 200 responses");
         $this->addOption('redirection', null, InputOption::VALUE_NONE, "Only show 30x responses");
         $this->addOption('not-found', null, InputOption::VALUE_NONE, "Only show 404 responses");
         $this->addOption('client-errors', null, InputOption::VALUE_NONE, "Only show 40x responses");
@@ -76,6 +76,9 @@ class Stats extends Command {
         }
         if ($input->getOption('response-code')) {
             $query->responseCode($input->getOption('response-code'));
+        }
+        if ($input->getOption('successful')) {
+            $query->successCode();
         }
         if ($input->getOption('redirection')) {
             $query->redirectionCodes();
@@ -134,7 +137,7 @@ class Stats extends Command {
             stdOutComment("URIs: ({$num_uris})", $output);
             $uris = 0;
             foreach ($query->getRequestUris() as $uri => $count) {
-                if ($uris > $input->getOption('count')) {
+                if ($uris >= $input->getOption('count')) {
                     break;
                 }
                 stdOut("{$count}\t\t$uri", $output);
@@ -144,7 +147,7 @@ class Stats extends Command {
             stdOutComment("IP Addresses: ({$num_ips})", $output);
             $ips = 0;
             foreach ($query->getIpStats() as $uri => $count) {
-                if ($ips > $input->getOption('count')) {
+                if ($ips >= $input->getOption('count')) {
                     break;
                 }
                 stdOut("{$count}\t\t$uri", $output);
@@ -154,7 +157,7 @@ class Stats extends Command {
             stdOutComment("Response Codes: ({$num_codes})", $output);
             $codes = 0;
             foreach ($query->getResponseCodes() as $code => $count) {
-                if ($codes > $input->getOption('count')) {
+                if ($codes >= $input->getOption('count')) {
                     break;
                 }
                 stdOut("{$count}\t\t$code", $output);
@@ -164,7 +167,7 @@ class Stats extends Command {
             stdOutComment("Referrers: ({$num_referrers})", $output);
             $referrers = 0;
             foreach ($query->getReferrers() as $ref => $count) {
-                if ($referrers > $input->getOption('count')) {
+                if ($referrers >= $input->getOption('count')) {
                     break;
                 }
                 stdOut("{$count}\t\t$ref", $output);
@@ -174,23 +177,17 @@ class Stats extends Command {
             stdOutComment("User Agents: ({$num_agents})", $output);
             $agents = 0;
             foreach ($query->getUserAgents() as $agent => $count) {
-                if ($agents > $input->getOption('count')) {
+                if ($agents >= $input->getOption('count')) {
                     break;
                 }
                 stdOut("{$count}\t\t$agent", $output);
                 $agents++;
             }
-            if ($input->getOption('raw-entries')) {
-                stdOutComment("Lines that matched query:", $output);
-                foreach ($query->getRawEntries() as $line) {
-                    stdOut($line, $output);
-                }
-            }
             if ($output->isVerbose()) {
                 stdOutInfo("Query took {$query->getQueryTime()} seconds and used {$query->getQueryMemory()}", $output);
             }
         }
-
+        appLogInfo(trim(`whoami`)." performed a stats query on {$path}");
 
     }
 
