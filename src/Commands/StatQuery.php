@@ -54,7 +54,10 @@ class StatQuery extends Command {
             appLogError("Unable to load file {$path} for query");
             stdOutErrorAndDie("Unable to load log file {$path}", $output);
         }
-        stdOutInfo("Starting Query...", $output);
+        if (!$input->getOption('json')) {
+            stdOutInfo("Starting Query...", $output);
+        }
+
         $query  = new Query($path);
         if ($input->getOption('ignore-agent')) {
             $query->ignoreAgent($input->getOption('ignore-agent'));
