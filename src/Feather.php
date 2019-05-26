@@ -10,7 +10,7 @@ class Feather {
 
     // Application information
     protected $application_name     = "Feather Toolkit";
-    protected $application_version  = "0.0.1";
+    protected $application_version  = "0.0.2";
     // Shared assets
     protected $command_console;
 
