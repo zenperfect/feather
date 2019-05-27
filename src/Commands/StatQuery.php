@@ -25,6 +25,7 @@ class StatQuery extends Command {
         $this->addOption('json', null, InputOption::VALUE_NONE, 'Output as JSON for further processing.');
         $this->addOption('log-type', null, InputOption::VALUE_OPTIONAL, 'Specify whether it is a common or combined formatted Apache log.', "combined");
         $this->addOption('ignore-agent', null, InputOption::VALUE_OPTIONAL, "Exclude all traffic that contains the Agent String you provide.", false);
+        $this->addOption('ignore-referrer', null, InputOption::VALUE_OPTIONAL, "Exclude all traffic that contains the Referrer String you provide.", false);
         $this->addOption('ignore-bots', null, InputOption::VALUE_NONE, "Exclude all traffic from bots and spiders.");
         $this->addOption('only-bots', null, InputOption::VALUE_NONE, "Only display traffic from bots and spiders.");
 
@@ -61,6 +62,9 @@ class StatQuery extends Command {
         $query  = new Query($path);
         if ($input->getOption('ignore-agent')) {
             $query->ignoreAgent($input->getOption('ignore-agent'));
+        }
+        if ($input->getOption('ignore-referrer')) {
+            $query->ignoreReferrer($input->getOption('ignore-referrer'));
         }
         if ($input->getOption('ignore-bots')) {
             $query->ignoreBots();
