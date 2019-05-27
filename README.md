@@ -9,8 +9,15 @@ I recommend cloning a copy to your local machine first to get used to the comman
 
 **List Commands**: 
 
+For the main feather application:
+
 ```
-php feather --list
+php feather
+```
+
+For one individual command (in this case the stats command):
+```
+php feather stats --list
 ```
 
 This will provide a detailed list of all available commands a quick description of what they do. **Everything in Feather is non-destructive**. When gathering information from your server that generates additional or transformed information, that transformed information is stored in the app folder.
@@ -47,38 +54,39 @@ Usage:
   stats [options] [--] <path>
 
 Arguments:
-  path                                 The path to the access log to be parsed
+  path                                     The path to the access log to be parsed
 
 Options:
-  -c, --count[=COUNT]                  Number of records to print to console from each analytic. [default: 10]
-      --json                           Output as JSON for further processing.
-      --log-type[=LOG-TYPE]            Specify whether it is a common or combined formatted Apache log. [default: "combined"]
-      --ignore-agent[=IGNORE-AGENT]    Exclude all traffic that contains the Agent String you provide. [default: false]
-      --ignore-bots                    Exclude all traffic from bots and spiders.
-      --only-bots                      Only display traffic from bots and spiders.
-      --ignore-files                   Exclude requests for static resources such as css, js, jpg files.
-      --only-files                     Only show requests for static resources such as css, js, jpg files.
-      --response-code[=RESPONSE-CODE]  Only show traffic based on a HTTP response code.
-      --successful                     Only show 200 responses
-      --redirection                    Only show 30x responses
-      --not-found                      Only show 404 responses
-      --client-errors                  Only show 40x responses
-      --server-errors                  Only show 50x responses
-      --unusual-agents                 Only show unusual agent traffic
-      --today                          Only show today's data in the output.
-      --current-month                  Only show this month's data in the output.
-      --current-year                   Only show this year's data in the output.
-      --this-agent[=THIS-AGENT]        Display only traffic from a specific user agent using a case-insensitive search term. [default: false]
-      --this-referrer[=THIS-REFERRER]  Display only traffic from a specific referrer using a case-insensitive search term. [default: false]
-      --this-uri[=THIS-URI]            Display only traffic to a specific URI using a case-insensitive search term. [default: false]
-      --this-ip[=THIS-IP]              Display only traffic from a specific IP address [default: false]
-  -h, --help                           Display this help message
-  -q, --quiet                          Do not output any message
-  -V, --version                        Display this application version
-      --ansi                           Force ANSI output
-      --no-ansi                        Disable ANSI output
-  -n, --no-interaction                 Do not ask any interactive question
-  -v|vv|vvv, --verbose                 Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+  -c, --count[=COUNT]                      Number of records to print to console from each analytic. [default: 10]
+      --json                               Output as JSON for further processing.
+      --log-type[=LOG-TYPE]                Specify whether it is a common or combined formatted Apache log. [default: "combined"]
+      --ignore-agent[=IGNORE-AGENT]        Exclude all traffic that contains the Agent String you provide. [default: false]
+      --ignore-referrer[=IGNORE-REFERRER]  Exclude all traffic that contains the Referrer String you provide. [default: false]
+      --ignore-bots                        Exclude all traffic from bots and spiders.
+      --only-bots                          Only display traffic from bots and spiders.
+      --ignore-files                       Exclude requests for static resources such as css, js, jpg files.
+      --only-files                         Only show requests for static resources such as css, js, jpg files.
+      --response-code[=RESPONSE-CODE]      Only show traffic based on a HTTP response code.
+      --successful                         Only show 200 responses
+      --redirection                        Only show 30x responses
+      --not-found                          Only show 404 responses
+      --client-errors                      Only show 40x responses
+      --server-errors                      Only show 50x responses
+      --unusual-agents                     Only show unusual agent traffic
+      --today                              Only show today's data in the output.
+      --current-month                      Only show this month's data in the output.
+      --current-year                       Only show this year's data in the output.
+      --this-agent[=THIS-AGENT]            Display only traffic from a specific user agent using a case-insensitive search term. [default: false]
+      --this-referrer[=THIS-REFERRER]      Display only traffic from a specific referrer using a case-insensitive search term. [default: false]
+      --this-uri[=THIS-URI]                Display only traffic to a specific URI using a case-insensitive search term. [default: false]
+      --this-ip[=THIS-IP]                  Display only traffic from a specific IP address [default: false]
+  -h, --help                               Display this help message
+  -q, --quiet                              Do not output any message
+  -V, --version                            Display this application version
+      --ansi                               Force ANSI output
+      --no-ansi                            Disable ANSI output
+  -n, --no-interaction                     Do not ask any interactive question
+  -v|vv|vvv, --verbose                     Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
 Help:
   Will return a list of stats by IP Address, Response Code, URI, Referrer
@@ -94,36 +102,37 @@ Usage:
   raw [options] [--] <path>
 
 Arguments:
-  path                                 The path to the access log to be parsed
+  path                                     The path to the access log to be parsed
 
 Options:
-      --log-type[=LOG-TYPE]            Specify whether it is a common or combined formatted Apache log. [default: "combined"]
-      --ignore-agent[=IGNORE-AGENT]    Exclude all traffic that contains the Agent String you provide. [default: false]
-      --ignore-bots                    Exclude all traffic from bots and spiders.
-      --only-bots                      Only display traffic from bots and spiders.
-      --ignore-files                   Exclude requests for static resources such as css, js, jpg files.
-      --only-files                     Only show requests for static resources such as css, js, jpg files.
-      --response-code[=RESPONSE-CODE]  Only show traffic based on a HTTP response code.
-      --successful                     Only show 200 responses
-      --redirection                    Only show 30x responses
-      --not-found                      Only show 404 responses
-      --client-errors                  Only show 40x responses
-      --server-errors                  Only show 50x responses
-      --unusual-agents                 Only show unusual agent traffic
-      --today                          Only show today's data in the output.
-      --current-month                  Only show this month's data in the output.
-      --current-year                   Only show this year's data in the output.
-      --this-agent[=THIS-AGENT]        Display only traffic from a specific user agent using a case-insensitive search term. [default: false]
-      --this-referrer[=THIS-REFERRER]  Display only traffic from a specific referrer using a case-insensitive search term. [default: false]
-      --this-uri[=THIS-URI]            Display only traffic to a specific URI using a case-insensitive search term. [default: false]
-      --this-ip[=THIS-IP]              Display only traffic from a specific IP address [default: false]
-  -h, --help                           Display this help message
-  -q, --quiet                          Do not output any message
-  -V, --version                        Display this application version
-      --ansi                           Force ANSI output
-      --no-ansi                        Disable ANSI output
-  -n, --no-interaction                 Do not ask any interactive question
-  -v|vv|vvv, --verbose                 Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+      --log-type[=LOG-TYPE]                Specify whether it is a common or combined formatted Apache log. [default: "combined"]
+      --ignore-agent[=IGNORE-AGENT]        Exclude all traffic that contains the Agent String you provide. [default: false]
+      --ignore-referrer[=IGNORE-REFERRER]  Exclude all traffic that contains the Referrer String you provide. [default: false]
+      --ignore-bots                        Exclude all traffic from bots and spiders.
+      --only-bots                          Only display traffic from bots and spiders.
+      --ignore-files                       Exclude requests for static resources such as css, js, jpg files.
+      --only-files                         Only show requests for static resources such as css, js, jpg files.
+      --response-code[=RESPONSE-CODE]      Only show traffic based on a HTTP response code.
+      --successful                         Only show 200 responses
+      --redirection                        Only show 30x responses
+      --not-found                          Only show 404 responses
+      --client-errors                      Only show 40x responses
+      --server-errors                      Only show 50x responses
+      --unusual-agents                     Only show unusual agent traffic
+      --today                              Only show today's data in the output.
+      --current-month                      Only show this month's data in the output.
+      --current-year                       Only show this year's data in the output.
+      --this-agent[=THIS-AGENT]            Display only traffic from a specific user agent using a case-insensitive search term. [default: false]
+      --this-referrer[=THIS-REFERRER]      Display only traffic from a specific referrer using a case-insensitive search term. [default: false]
+      --this-uri[=THIS-URI]                Display only traffic to a specific URI using a case-insensitive search term. [default: false]
+      --this-ip[=THIS-IP]                  Display only traffic from a specific IP address [default: false]
+  -h, --help                               Display this help message
+  -q, --quiet                              Do not output any message
+  -V, --version                            Display this application version
+      --ansi                               Force ANSI output
+      --no-ansi                            Disable ANSI output
+  -n, --no-interaction                     Do not ask any interactive question
+  -v|vv|vvv, --verbose                     Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
 Help:
   Will return all lines from Apache log that matches a given query
