@@ -31,7 +31,7 @@ php feather stats --help
 This will list all of the arguments and options available when performing the stats command. Most of the options available stack on each other and help you further refine a search *e.g.*:
 
 ```
-php feather stats /path/to/ssl.access_log --ignore-bots --ignore-files --today --ignore-agent Fedora --this-agent="python"
+php feather stats /path/to/ssl.access_log --ignore-bots --ignore-files --today --ignore-agent=Fedora --this-agent="python"
 ```
 
 The above command will parse your ssl.access_log and then return all lines that are:
