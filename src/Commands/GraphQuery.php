@@ -46,6 +46,7 @@ class GraphQuery extends Command {
         $this->addOption('this-ip', null, InputOption::VALUE_OPTIONAL, 'Display only traffic from a specific IP address', false);
         $this->addOption('interval', null,InputOption::VALUE_OPTIONAL, 'The unit of time to graph the traffic by. Options are d=day, m=month', "d");
         $this->addOption('unique', null, InputOption::VALUE_OPTIONAL, "The graphed total. Values accepted are requests or ips.", "requests");
+        $this->addOption('graphic', null, InputOption::VALUE_OPTIONAL, 'The character to use as the graphical bar chart.', "|");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -123,6 +124,7 @@ class GraphQuery extends Command {
 
         $mode       = ($input->getOption('interval')) ? $input->getOption('interval') : "d";
         $unique     = ($input->getOption('unique')) ? $input->getOption('unique') : "requests";
+        $graphic    = ($input->getOption('graphic')) ? $input->getOption('graphic') : "|";
         $collection = [];
         $sum        = 0;
         if ($mode == "d") {
@@ -159,7 +161,7 @@ class GraphQuery extends Command {
             //stdOut($interval.": ".$count, $output);
             $percentage = round(($count / $sum) * 100, 2);
             $char_count = round($percentage, 0);
-            stdOut($interval.": {$count} ({$percentage}%)\t".str_repeat("|", $char_count), $output);
+            stdOut($interval.": {$count} ({$percentage}%)\t".str_repeat($graphic, $char_count), $output);
         }
 
         // Reportable information
