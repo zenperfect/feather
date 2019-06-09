@@ -158,7 +158,7 @@ class GraphQuery extends Command {
         foreach ($collection as $interval => $count) {
             //stdOut($interval.": ".$count, $output);
             $percentage = round(($count / $sum) * 100, 2);
-            $char_count = $percentage * 10;
+            $char_count = round($percentage, 0);
             stdOut($interval.": {$count} ({$percentage}%)\t".str_repeat("|", $char_count), $output);
         }
 
