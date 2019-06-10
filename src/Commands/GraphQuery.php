@@ -161,7 +161,7 @@ class GraphQuery extends Command {
             //stdOut($interval.": ".$count, $output);
             $percentage = round(($count / $sum) * 100, 2);
             $char_count = round($percentage, 0);
-            stdOut($interval.": {$count} ({$percentage}%)\t".str_repeat($graphic, $char_count), $output);
+            stdOut($interval.": \t{$count} ({$percentage}%)\t\t".str_repeat($graphic, $char_count), $output);
         }
 
         // Reportable information
