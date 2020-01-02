@@ -55,6 +55,7 @@ class GraphQuery extends Command {
             appLogError("Unable to load file {$path} for query");
             stdOutErrorAndDie("Unable to load log file {$path}", $output);
         }
+        stdOut("<info>Collecting graph data</info>", $output);
         $query  = new Query($path);
         if ($input->getOption('ignore-agent')) {
             $query->ignoreAgent($input->getOption('ignore-agent'));
