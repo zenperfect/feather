@@ -152,16 +152,25 @@ class GraphQuery extends Command {
         }
 
         if ($unique !== "requests") {
-            foreach ($collection as $date_interval => $ips) {
-                $collection[$date_interval] = count(array_unique($ips));
-            }
-        }
+            $total_unique_ips = 0;
+            foreach ($collection as $interval => $ips) {
+                $interval_count = count(array_unique($ips));
+                $collection[$interval] = $interval_count;
+                $total_unique_ips += $interval_count;
 
-        foreach ($collection as $interval => $count) {
-            //stdOut($interval.": ".$count, $output);
-            $percentage = round(($count / $sum) * 100, 2);
-            $char_count = round($percentage, 0);
-            stdOut($interval.": \t{$count} ({$percentage}%)\t\t".str_repeat($graphic, $char_count), $output);
+            }
+            foreach ($collection as $interval => $count) {
+                $percentage = round(($count / $total_unique_ips) * 100, 2);
+                $char_count = round($percentage, 0);
+                stdOut($interval.": \t{$count} ({$percentage}%)\t\t".str_repeat($graphic, $char_count), $output);
+            }
+        } else {
+            foreach ($collection as $interval => $count) {
+                //stdOut($interval.": ".$count, $output);
+                $percentage = round(($count / $sum) * 100, 2);
+                $char_count = round($percentage, 0);
+                stdOut($interval.": \t{$count} ({$percentage}%)\t\t".str_repeat($graphic, $char_count), $output);
+            }
         }
 
         // Reportable information
