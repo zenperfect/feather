@@ -192,7 +192,7 @@ class StatQuery extends Command {
                 if ($methods >= $input->getOption('count')) {
                     break;
                 }
-                $table_ips->addRow([$count, $method]);
+                $table_rm->addRow([$count, $method]);
                 $methods++;
             }
             $table_rm->setStyle('compact')->render();
