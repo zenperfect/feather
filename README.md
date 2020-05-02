@@ -44,7 +44,56 @@ The above command will parse your ssl.access_log and then return all lines that 
  
 You could optionally tag on an option to output it to JSON using (--json) to use as an application endpoint or push to a file. Making Feather an awesome solution to feed raw Apache data into your web app! 
 
+## raw Command
+The raw command will output a subset of requests from an apache Access log based on query parameters you provide to it. This command can be very useful for nailing down specific events based on a set of criteria. Output from the raw command can be piped to a file for storage and analysis.
+
+```
+Description:
+  Display a filtered set of lines from an Apache Access Log.
+
+Usage:
+  raw [options] [--] <path>
+
+Arguments:
+  path                                     The path to the access log to be parsed
+
+Options:
+      --log-type[=LOG-TYPE]                Specify whether it is a common or combined formatted Apache log. [default: "combined"]
+      --ignore-agent[=IGNORE-AGENT]        Exclude all traffic that contains the Agent String you provide. [default: false]
+      --ignore-referrer[=IGNORE-REFERRER]  Exclude all traffic that contains the Referrer String you provide. [default: false]
+      --ignore-bots                        Exclude all traffic from bots and spiders.
+      --only-bots                          Only display traffic from bots and spiders.
+      --ignore-files                       Exclude requests for static resources such as css, js, jpg files.
+      --only-files                         Only show requests for static resources such as css, js, jpg files.
+      --response-code[=RESPONSE-CODE]      Only show traffic based on a HTTP response code.
+      --successful                         Only show 200 responses
+      --redirection                        Only show 30x responses
+      --not-found                          Only show 404 responses
+      --client-errors                      Only show 40x responses
+      --server-errors                      Only show 50x responses
+      --http-verb[=HTTP-VERB]              Only show traffic based on a HTTP request verb
+      --unusual-agents                     Only show unusual agent traffic
+      --today                              Only show today's data in the output.
+      --current-month                      Only show this month's data in the output.
+      --current-year                       Only show this year's data in the output.
+      --this-agent[=THIS-AGENT]            Display only traffic from a specific user agent using a case-insensitive search term. [default: false]
+      --this-referrer[=THIS-REFERRER]      Display only traffic from a specific referrer using a case-insensitive search term. [default: false]
+      --this-uri[=THIS-URI]                Display only traffic to a specific URI using a case-insensitive search term. [default: false]
+      --this-ip[=THIS-IP]                  Display only traffic from a specific IP address [default: false]
+  -h, --help                               Display this help message
+  -q, --quiet                              Do not output any message
+  -V, --version                            Display this application version
+      --ansi                               Force ANSI output
+      --no-ansi                            Disable ANSI output
+  -n, --no-interaction                     Do not ask any interactive question
+  -v|vv|vvv, --verbose                     Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+
+Help:
+  Will return all lines from Apache log that matches a given query
+```
+
 ## stats Command
+The stats command will output a quick set of broad overview statistics mainly focused on giving unique counts of various subset data from an Apache access log.
 
 ```
 Description:
@@ -72,6 +121,7 @@ Options:
       --not-found                          Only show 404 responses
       --client-errors                      Only show 40x responses
       --server-errors                      Only show 50x responses
+      --http-verb[=HTTP-VERB]              Only show traffic based on a HTTP request verb
       --unusual-agents                     Only show unusual agent traffic
       --today                              Only show today's data in the output.
       --current-month                      Only show this month's data in the output.
@@ -92,14 +142,15 @@ Help:
   Will return a list of stats by IP Address, Response Code, URI, Referrer
 ```
 
-## raw Command
+## graph Command
+The graph command offers a quick way to evaluate web traffic based on given set of criteria. The output is a neatly formatted stack of horizontal bar charts for quick insight into traffic to your website. The command also offers the ability to customize the symbol used in the bar chart.
 
 ```
 Description:
-  Display a filtered set of lines from an Apache Access Log.
+  Display a graphical representation of your traffic.
 
 Usage:
-  raw [options] [--] <path>
+  graph [options] [--] <path>
 
 Arguments:
   path                                     The path to the access log to be parsed
@@ -126,6 +177,9 @@ Options:
       --this-referrer[=THIS-REFERRER]      Display only traffic from a specific referrer using a case-insensitive search term. [default: false]
       --this-uri[=THIS-URI]                Display only traffic to a specific URI using a case-insensitive search term. [default: false]
       --this-ip[=THIS-IP]                  Display only traffic from a specific IP address [default: false]
+      --interval[=INTERVAL]                The unit of time to graph the traffic by. Options are d=day, m=month [default: "d"]
+      --unique[=UNIQUE]                    The graphed total. Values accepted are requests or ips. [default: "requests"]
+      --graphic[=GRAPHIC]                  The character to use as the graphical bar chart. [default: "|"]
   -h, --help                               Display this help message
   -q, --quiet                              Do not output any message
   -V, --version                            Display this application version
@@ -135,10 +189,66 @@ Options:
   -v|vv|vvv, --verbose                     Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
 Help:
-  Will return all lines from Apache log that matches a given query
+  Will graph all requests from Apache log that matches a given query
+```
+
+## summary Command
+The summary command, much like the stats command, offers a very high-level view of your log itself. Given the path, it will parse every line an Apache access log and provide a summarized overview. The result can be formatted to JSON and piped to a file for various further data processing opportunities.
+
+```
+Description:
+  Display a summary of data contained in an Apache Access Log.
+
+Usage:
+  summary [options] [--] <path>
+
+Arguments:
+  path                       The path to the access log to be parsed
+
+Options:
+      --log-type[=LOG-TYPE]  Specify whether it is a common or combined formatted Apache log. [default: "combined"]
+      --json                 Output as JSON for further processing.
+  -h, --help                 Display this help message
+  -q, --quiet                Do not output any message
+  -V, --version              Display this application version
+      --ansi                 Force ANSI output
+      --no-ansi              Disable ANSI output
+  -n, --no-interaction       Do not ask any interactive question
+  -v|vv|vvv, --verbose       Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+
+Help:
+  Will display a brief summary of the contents of a specified Apache access Log
+```
+
+## malformed-requests Command
+The malformed-requests command will display a raw list of Apache access log lines that could not be parsed. this can be valuable in looking for possible malicious activity.
+
+```
+Description:
+  Display a list of unparsed / malformed requests.
+
+Usage:
+  malformed-requests [options] [--] <path>
+
+Arguments:
+  path                       The path to the access log to be parsed
+
+Options:
+      --log-type[=LOG-TYPE]  Specify whether it is a common or combined formatted Apache log. [default: "combined"]
+  -h, --help                 Display this help message
+  -q, --quiet                Do not output any message
+  -V, --version              Display this application version
+      --ansi                 Force ANSI output
+      --no-ansi              Disable ANSI output
+  -n, --no-interaction       Do not ask any interactive question
+  -v|vv|vvv, --verbose       Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+
+Help:
+  Will list raw requests which were unable to be parsed by feather
 ```
 
 ## uri-origin Command
+The uri-origin command takes a uri and provides you with a list of all referral traffic to that uri using the data from an Apache access log.
 
 ```
 Description:

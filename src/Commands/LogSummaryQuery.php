@@ -56,6 +56,8 @@ class LogSummaryQuery extends Command {
             $table  = new Table($output);
             $table->setHeaders(['Statistic', 'Details']);
             $table->addRow(['Filesize', $log->getSize()]);
+            $table->addRow(['Starts On', $query->getLogEarliestDate()->format('Y-m-d H:i:s')]);
+            $table->addRow(['Ends On', $query->getLogLatestDate()->format('Y-m-d H:i:s')]);
             $table->addRow(['Line Count', $query->getLogLineCount()]);
             $table->addRow(['Unparsed Lines',$query->getMalformedEntryCount()]);
             $table->addRow(['Unique IPs',count($query->getIpStats())]);

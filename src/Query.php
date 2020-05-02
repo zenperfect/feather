@@ -8,6 +8,8 @@ class Query {
 
     // Log information
     protected $path;
+    protected $log_earliest_date        = null;
+    protected $log_latest_date          = null;
     protected $real_line_count          = 0;
     protected $raw_entries              = [];
     protected $parsed_entries           = [];
@@ -41,6 +43,8 @@ class Query {
     protected $target_client_errors     = false;
 
     // Parsed Query Stats
+    protected $earliest_date                 = null;
+    protected $latest_date                   = null;
     protected $stat_ip_addresses             = [];
     protected $stat_identds                  = [];
     protected $stat_userids                  = [];
@@ -72,6 +76,21 @@ class Query {
             $this->real_line_count++;
             $entry = new LogEntry($line, $regex);
             if ($entry->parsedSuccessfully()) {
+
+                // Check log dates first
+                if (is_null($this->log_earliest_date)) {
+                    $this->log_earliest_date = $entry->request_time;
+                }
+                if ($this->log_earliest_date > $entry->request_time) {
+                    $this->log_earliest_date = $entry->request_time;
+                }
+                if (is_null($this->log_latest_date)) {
+                    $this->log_latest_date = $entry->request_time;
+                }
+                if ($this->log_latest_date < $entry) {
+                    $this->log_latest_date = $entry->request_time;
+                }
+
 
                 // Inspect all entries for inclusion or exclusion
                 if ($this->ignore_files && $entry->is_file_resource) {
@@ -179,6 +198,20 @@ class Query {
                 }
                 array_push($this->parsed_entries, $entry);
                 array_push($this->raw_entries, $entry->getLine());
+
+                // Check query set dates last
+                if (is_null($this->earliest_date)) {
+                    $this->earliest_date = $entry->request_time;
+                }
+                if ($this->earliest_date > $entry->request_time) {
+                    $this->earliest_date = $entry->request_time;
+                }
+                if (is_null($this->latest_date)) {
+                    $this->latest_date = $entry->request_time;
+                }
+                if ($this->latest_date < $entry) {
+                    $this->latest_date = $entry->request_time;
+                }
 
             } else {
                 array_push($this->malformed_entries, $line);
@@ -291,6 +324,22 @@ class Query {
 
     public function clientErrors() {
         $this->target_client_errors = true;
+    }
+
+    public function getLogEarliestDate() {
+        return $this->log_earliest_date;
+    }
+
+    public function getLogLatestDate() {
+        return $this->log_latest_date;
+    }
+
+    public function getQueryEarliestDate() {
+        return $this->earliest_date;
+    }
+
+    public function getQueryLatestDate() {
+        return $this->latest_date;
     }
 
     public function getParsedEntries() {
@@ -407,6 +456,5 @@ class Query {
         }
         return ($a < $b) ? 1 : -1;
     }
-
 
 }
