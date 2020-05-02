@@ -39,7 +39,18 @@ class LogSummaryQuery extends Command {
         $query->run($input->getOption('log-type'));
 
         if ($input->getOption('json')) {
-
+            // Output as JSON
+            $data = [
+                "filesize"              => $log->getSize(),
+                "line-count"            => $query->getLogLineCount(),
+                "unparsed-lines"        => $query->getMalformedEntryCount(),
+                "unique-ips"            => count($query->getIpStats()),
+                "unique-uris"           => count($query->getRequestUris()),
+                "unique-referrers"      => count($query->getReferrers()),
+                "unique-user-agents"    => count($query->getUserAgents()),
+                "request-methods"       => implode(", ",array_keys($query->getRequestMethods()))
+            ];
+            stdOut(json_encode($data, JSON_PRETTY_PRINT), $output);
         } else {
             stdOut("<info>Collecting summary data...</info>", $output);
             $table  = new Table($output);
