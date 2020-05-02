@@ -20,6 +20,9 @@ class MalformedQuery extends Command {
         // Arguments
         $this->addArgument("path", InputArgument::REQUIRED, "The path to the access log to be parsed");
 
+        // Options
+        $this->addOption('log-type', null, InputOption::VALUE_OPTIONAL, 'Specify whether it is a common or combined formatted Apache log.', "combined");
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -30,11 +33,12 @@ class MalformedQuery extends Command {
         }
         stdOut("<info>Collecting malformed requests...</info>", $output);
         $query  = new Query($path);
+        $query->run($input->getOption('log-type'));
         $sum    = $query->getMalformedEntryCount();
         if ($sum > 0) {
             $lines  = $query->getMalformedEntries();
             foreach ($lines as $line) {
-                stdOut($line, $output);
+                stdOut(trim($line), $output);
             }
         } else {
             stdOutError("No malformed entries found in log", $output);

@@ -163,7 +163,7 @@ class Query {
                 $this->isSetOrIncrement($entry->identd, $this->stat_identds);
                 $this->isSetOrIncrement($entry->user_id, $this->stat_userids);
                 $this->isSetOrIncrement($entry->request_time->format('Y-m-d H:i:s'), $this->stat_request_times);
-                $this->isSetOrIncrement($entry->request_method, $this->stat_request_methods[]);
+                $this->isSetOrIncrement($entry->request_method, $this->stat_request_methods);
                 $this->isSetOrIncrement($entry->request_uri, $this->stat_request_uris);
                 $this->isSetOrIncrement($entry->response_code,$this->stat_response_codes);
                 $this->isSetOrIncrement($entry->response_code_category,$this->stat_response_code_categories);

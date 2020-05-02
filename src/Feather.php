@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Commands\GraphQuery;
+use App\Commands\LogSummaryQuery;
 use App\Commands\MalformedQuery;
 use App\Commands\RawQuery;
 use App\Commands\StatQuery;
@@ -25,6 +26,7 @@ class Feather {
     protected function initializeCommandConsole() {
         $this->command_console = new \Symfony\Component\Console\Application("Zen Perfect Design | {$this->application_name}");
         $this->command_console->setVersion($this->application_version);
+        $this->command_console->add(new LogSummaryQuery());
         $this->command_console->add(new StatQuery());
         $this->command_console->add(new RawQuery());
         $this->command_console->add(new UriOriginQuery());
