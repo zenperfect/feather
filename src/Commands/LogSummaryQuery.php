@@ -42,13 +42,15 @@ class LogSummaryQuery extends Command {
             // Output as JSON
             $data = [
                 "filesize"              => $log->getSize(),
-                "line-count"            => $query->getLogLineCount(),
-                "unparsed-lines"        => $query->getMalformedEntryCount(),
-                "unique-ips"            => count($query->getIpStats()),
-                "unique-uris"           => count($query->getRequestUris()),
-                "unique-referrers"      => count($query->getReferrers()),
-                "unique-user-agents"    => count($query->getUserAgents()),
-                "request-methods"       => implode(", ",array_keys($query->getRequestMethods()))
+                "start.date"            => $query->getLogEarliestDate()->format('Y-m-d H:i:s'),
+                "end.date"              => $query->getLogLatestDate()->format('Y-m-d H:i:s'),
+                "line.count"            => $query->getLogLineCount(),
+                "unparsed.lines"        => $query->getMalformedEntryCount(),
+                "unique.ips"            => count($query->getIpStats()),
+                "unique.uris"           => count($query->getRequestUris()),
+                "unique.referrers"      => count($query->getReferrers()),
+                "unique.user-agents"    => count($query->getUserAgents()),
+                "request.methods"       => implode(", ",array_keys($query->getRequestMethods()))
             ];
             stdOut(json_encode($data, JSON_PRETTY_PRINT), $output);
         } else {
