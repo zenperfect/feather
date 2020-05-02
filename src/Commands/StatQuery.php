@@ -138,6 +138,7 @@ class StatQuery extends Command {
             $data = [
                 "uris"              => $query->getRequestUris(),
                 "ips"               => $query->getIpStats(),
+                "request.verbs"     => $query->getRequestMethods(),
                 "response.codes"    => $query->getResponseCodes(),
                 "referrers"         => $query->getReferrers(),
                 "user.agents"       => $query->getUserAgents()
