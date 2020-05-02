@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Models\LogEntry;
 use App\Query;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -193,7 +194,7 @@ class StatQuery extends Command {
                     break;
                 }
                 //stdOut("{$count}\t\t$code", $output);
-                $table_rc->addRow([$count, $code]);
+                $table_rc->addRow([$count, "{$code} (".LogEntry::getErrorCodeCategory($code).")"]);
                 $codes++;
             }
             $table_rc->setStyle('compact')->render();
