@@ -182,6 +182,21 @@ class StatQuery extends Command {
             $table_ips->setStyle('compact')->render();
             stdOutNewline($output);
 
+            // Request Verb Section
+            stdOutComment("Request Methods\n", $output);
+            $table_rm = new Table($output);
+            $table_rm->setHeaders(['Count', 'Request Method']);
+            $methods = 0;
+            foreach ($query->getRequestMethods() as $method => $count) {
+                if ($methods >= $input->getOption('count')) {
+                    break;
+                }
+                $table_ips->addRow([$count, $method]);
+                $methods++;
+            }
+            $table_rm->setStyle('compact')->render();
+            stdOutNewline($output);
+
             // Response Code Section
             stdOutComment("Response Codes\n", $output);
             $table_rc = new Table($output);
