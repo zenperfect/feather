@@ -35,6 +35,7 @@ class RawQuery extends Command {
         $this->addOption('not-found', null, InputOption::VALUE_NONE, "Only show 404 responses");
         $this->addOption('client-errors', null, InputOption::VALUE_NONE, "Only show 40x responses");
         $this->addOption('server-errors', null, InputOption::VALUE_NONE, "Only show 50x responses");
+        $this->addOption('http-verb', null, InputOption::VALUE_OPTIONAL, "Only show traffic based on a HTTP request verb");
         $this->addOption('only-files', null, InputOption::VALUE_NONE, "Only show requests for static resources such as css, js, jpg files.");
         $this->addOption('unusual-agents', null, InputOption::VALUE_NONE, "Only show unusual agent traffic");
         $this->addOption('today', null, InputOption::VALUE_NONE, "Only show today's data in the output.");
@@ -77,6 +78,9 @@ class RawQuery extends Command {
         }
         if ($input->getOption('response-code')) {
             $query->responseCode($input->getOption('response-code'));
+        }
+        if ($input->getOption('http-verb')) {
+            $query->requestVerb($input->getOption('http-verb'));
         }
         if ($input->getOption('successful')) {
             $query->successCode();

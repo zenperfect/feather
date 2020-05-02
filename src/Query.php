@@ -34,6 +34,7 @@ class Query {
     protected $target_agent             = "";
     protected $target_unusual_agents    = false;
     protected $target_response_code     = false;
+    protected $target_http_verb         = false;
     protected $target_successful_code   = false;
     protected $target_redirection_codes = false;
     protected $target_server_errors     = false;
@@ -140,6 +141,10 @@ class Query {
                 }
 
                 if ($this->target_response_code && ( (int) $entry->response_code !== $this->target_response_code)) {
+                    continue;
+                }
+
+                if ($this->target_http_verb && (strtolower($entry->request_method) !== strtolower($this->target_http_verb))) {
                     continue;
                 }
 
@@ -266,6 +271,10 @@ class Query {
 
     public function responseCode($int) {
         $this->target_response_code = (int) $int;
+    }
+
+    public function requestVerb($verb) {
+        $this->target_http_verb = $verb;
     }
 
     public function successCode() {
