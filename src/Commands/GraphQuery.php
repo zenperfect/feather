@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use App\Query;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -55,7 +56,7 @@ class GraphQuery extends Command {
             appLogError("Unable to load file {$path} for query");
             stdOutErrorAndDie("Unable to load log file {$path}", $output);
         }
-        stdOut("<info>Collecting graph data</info>", $output);
+        stdOut("<info>Collecting graph data...</info>", $output);
         $query  = new Query($path);
         if ($input->getOption('ignore-agent')) {
             $query->ignoreAgent($input->getOption('ignore-agent'));
@@ -130,8 +131,10 @@ class GraphQuery extends Command {
         $sum        = 0;
         if ($mode == "d") {
             $interval_format = "Y-m-d";
+            $interval_name = "Day";
         } else {
             $interval_format = "Y-m";
+            $interval_name = "Month";
         }
         foreach ($query->getParsedEntries() as $entry) {
             $date = $entry->request_time->format($interval_format);
@@ -152,32 +155,40 @@ class GraphQuery extends Command {
             $sum++;
         }
 
+        // initialize table
+        $table = new Table($output);
+
         if ($unique !== "requests") {
+            $table->setHeaders([$interval_name, 'Unique IPs', '% of Total', 'Graph Data']);
             $total_unique_ips = 0;
             foreach ($collection as $interval => $ips) {
                 $interval_count = count(array_unique($ips));
                 $collection[$interval] = $interval_count;
                 $total_unique_ips += $interval_count;
-
             }
             foreach ($collection as $interval => $count) {
                 $percentage = round(($count / $total_unique_ips) * 100, 2);
                 $char_count = round($percentage, 0);
-                stdOut($interval.": \t{$count} ({$percentage}%)\t\t".str_repeat($graphic, $char_count), $output);
+                $table->addRow([$interval, $count, $percentage."%", str_repeat($graphic, $char_count)]);
+                //stdOut($interval.": \t{$count} ({$percentage}%)\t\t".str_repeat($graphic, $char_count), $output);
             }
         } else {
+            $table->setHeaders([$interval_name, 'Total Requests', '% of Total', 'Graph Data']);
             foreach ($collection as $interval => $count) {
                 //stdOut($interval.": ".$count, $output);
                 $percentage = round(($count / $sum) * 100, 2);
                 $char_count = round($percentage, 0);
-                stdOut($interval.": \t{$count} ({$percentage}%)\t\t".str_repeat($graphic, $char_count), $output);
+                $table->addRow([$interval, $count, $percentage."%", str_repeat($graphic, $char_count)]);
+                //stdOut($interval.": \t{$count} ({$percentage}%)\t\t".str_repeat($graphic, $char_count), $output);
             }
         }
 
+        $table->setStyle('borderless');
+        $table->render();
         // Reportable information
         $query_line_count       = $sum;
         $log_file_line_count    = $query->getLogLineCount();
-        appLogInfo(trim(`whoami`)." performed raw query on {$path} which returned {$query_line_count} line out of {$log_file_line_count} total");
+        appLogInfo(trim(`whoami`)." performed graph query on {$path} which returned {$query_line_count} line out of {$log_file_line_count} total");
 
     }
 
