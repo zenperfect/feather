@@ -87,7 +87,7 @@ class Query {
                 if (is_null($this->log_latest_date)) {
                     $this->log_latest_date = $entry->request_time;
                 }
-                if ($this->log_latest_date < $entry) {
+                if ($this->log_latest_date < $entry->request_time) {
                     $this->log_latest_date = $entry->request_time;
                 }
 
@@ -209,7 +209,7 @@ class Query {
                 if (is_null($this->latest_date)) {
                     $this->latest_date = $entry->request_time;
                 }
-                if ($this->latest_date < $entry) {
+                if ($this->latest_date < $entry->request_time) {
                     $this->latest_date = $entry->request_time;
                 }
 
