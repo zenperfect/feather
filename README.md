@@ -295,7 +295,7 @@ Clone the repo to your webserver or local machine by either downloading and extr
 git clone zenperfect/feather ./feather
 ```
 
-Install dependencies using composer by navigating to the ethereal project folder and running:
+Install dependencies using composer by navigating to the root project folder and running:
 
 ```
 composer install
