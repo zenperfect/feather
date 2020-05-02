@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use App\Query;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -140,56 +141,96 @@ class StatQuery extends Command {
         } else {
             stdOutInfo("Records found in query: ".$query->getParsedEntryCount()." out of a total of ".$query->getLogLineCount()." lines", $output);
 
+            // URIs Section
+            stdOutComment("URIs\n", $output);
+            $table_uri = new Table($output);
             $num_uris = count($query->getRequestUris());
-            stdOutComment("URIs: ({$num_uris})", $output);
+            //stdOutComment("URIs: ({$num_uris})", $output);
+            $table_uri->setHeaders(['Count', 'URI']);
             $uris = 0;
             foreach ($query->getRequestUris() as $uri => $count) {
                 if ($uris >= $input->getOption('count')) {
                     break;
                 }
-                stdOut("{$count}\t\t$uri", $output);
+                //stdOut("{$count}\t\t$uri", $output);
+                $table_uri->addRow([$count, $uri]);
                 $uris++;
             }
+            $table_uri->setStyle('compact')->render();
+            stdOutNewline($output);
+
+            // IPs Section
+            stdOutComment("IP Addresses\n", $output);
+            $table_ips = new Table($output);
             $num_ips = count($query->getIpStats());
-            stdOutComment("IP Addresses: ({$num_ips})", $output);
+            //stdOutComment("IP Addresses: ({$num_ips})", $output);
+            $table_ips->setHeaders(['Count', 'IP Address']);
             $ips = 0;
-            foreach ($query->getIpStats() as $uri => $count) {
+            foreach ($query->getIpStats() as $ip => $count) {
                 if ($ips >= $input->getOption('count')) {
                     break;
                 }
-                stdOut("{$count}\t\t$uri", $output);
+                //stdOut("{$count}\t\t$ip", $output);
+                $table_ips->addRow([$count, $ip]);
                 $ips++;
             }
+            $table_ips->setStyle('compact')->render();
+            stdOutNewline($output);
+
+            // Response Code Section
+            stdOutComment("Response Codes\n", $output);
+            $table_rc = new Table($output);
             $num_codes = count($query->getResponseCodes());
-            stdOutComment("Response Codes: ({$num_codes})", $output);
+            //stdOutComment("Response Codes: ({$num_codes})", $output);
+            $table_rc->setHeaders(['Count', 'Response Code']);
             $codes = 0;
             foreach ($query->getResponseCodes() as $code => $count) {
                 if ($codes >= $input->getOption('count')) {
                     break;
                 }
-                stdOut("{$count}\t\t$code", $output);
+                //stdOut("{$count}\t\t$code", $output);
+                $table_rc->addRow([$count, $code]);
                 $codes++;
             }
+            $table_rc->setStyle('compact')->render();
+            stdOutNewline($output);
+
+            // Referrer section
+            stdOutComment("HTTP Referrers\n", $output);
+            $table_ref = new Table($output);
             $num_referrers = count($query->getReferrers());
-            stdOutComment("Referrers: ({$num_referrers})", $output);
+            //stdOutComment("Referrers: ({$num_referrers})", $output);
+            $table_ref->setHeaders(['Count', 'Referrer']);
             $referrers = 0;
             foreach ($query->getReferrers() as $ref => $count) {
                 if ($referrers >= $input->getOption('count')) {
                     break;
                 }
-                stdOut("{$count}\t\t$ref", $output);
+                //stdOut("{$count}\t\t$ref", $output);
+                $table_ref->addRow([$count, $ref]);
                 $referrers++;
             }
+            $table_ref->setStyle('compact')->render();
+            stdOutNewline($output);
+
+            // User Agents section
+            stdOutComment("User Agents\n", $output);
+            $table_agents = new Table($output);
             $num_agents = count($query->getUserAgents());
-            stdOutComment("User Agents: ({$num_agents})", $output);
+            //stdOutComment("User Agents: ({$num_agents})", $output);
+            $table_agents->setHeaders(['Count', 'User Agent']);
             $agents = 0;
             foreach ($query->getUserAgents() as $agent => $count) {
                 if ($agents >= $input->getOption('count')) {
                     break;
                 }
-                stdOut("{$count}\t\t$agent", $output);
+                //stdOut("{$count}\t\t$agent", $output);
+                $table_agents->addRow([$count, $agent]);
                 $agents++;
             }
+            $table_agents->setStyle('compact')->render();
+            stdOutNewline($output);
+
             if ($output->isVerbose()) {
                 stdOutInfo("Query took {$query->getQueryTime()} seconds and used {$query->getQueryMemory()}", $output);
             }
