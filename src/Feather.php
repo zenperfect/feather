@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Commands\GraphQuery;
+use App\Commands\MalformedQuery;
 use App\Commands\RawQuery;
 use App\Commands\StatQuery;
 use App\Commands\UriOriginQuery;
@@ -28,6 +29,7 @@ class Feather {
         $this->command_console->add(new RawQuery());
         $this->command_console->add(new UriOriginQuery());
         $this->command_console->add(new GraphQuery());
+        $this->command_console->add(new MalformedQuery());
     }
 
     public function console() {
