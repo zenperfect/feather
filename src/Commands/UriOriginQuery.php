@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use App\Query;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -15,7 +16,7 @@ class UriOriginQuery extends Command {
 
         // General
         $this->setName('uri-origin');
-        $this->setDescription('Display a list of all referrer traffic to a specified origin.');
+        $this->setDescription('Display a list of all referrer traffic to a specified target uri.');
         $this->setHelp('Will return a list of all referrer traffic to a case-insensitive uri search term.');
         // Arguments
         $this->addArgument("path", InputArgument::REQUIRED, "The path to the access log to be parsed");
@@ -34,6 +35,7 @@ class UriOriginQuery extends Command {
             appLogError("Unable to load file {$path} for query");
             stdOutErrorAndDie("Unable to load log file {$path}", $output);
         }
+        stdOut("<info>Collecting data...</info>", $output);
         $query  = new Query($path);
         if ($input->getOption('ignore-referrer')) {
             $query->ignoreReferrer($input->getOption('ignore-referrer'));
@@ -46,11 +48,14 @@ class UriOriginQuery extends Command {
         }
 
         $referrers = $query->getReferrers();
-        stdOutComment("Count\t\tUri", $output);
+        $table = new Table($output);
+        $table->setHeaders(['Count', 'Referrer']);
         foreach ($referrers as $target => $count) {
-            stdOut("{$count}\t\t{$target}", $output);
+            //stdOut("{$count}\t\t{$target}", $output);
+            $table->addRow([$count, $target]);
         }
-
+        $table->setStyle('borderless');
+        $table->render();
     }
 
 }
